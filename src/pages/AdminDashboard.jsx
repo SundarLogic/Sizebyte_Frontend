@@ -8,14 +8,6 @@ function AdminDashboard() {
       <Link to="/admin/products/add">
         <button>Add Product</button>
       </Link>
-
-      <Link to="/admin/products">
-        <button>Manage Products</button>
-      </Link>
-
-      <Link to="/admin/orders">
-        <button>View Orders</button>
-      </Link>
     </div>
   );
 }
