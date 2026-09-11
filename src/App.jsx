@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Products from "./pages/Products";
 import Login from "./pages/Login";
-import AdminSignup from "./pages/AdminSignup";
 import Signup from "./pages/Signup";
 import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
@@ -22,7 +21,6 @@ function App() {
         <Route path="/" element={<Products />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/admin/signup" element={<AdminSignup />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
