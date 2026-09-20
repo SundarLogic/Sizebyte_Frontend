@@ -16,14 +16,20 @@ function Navbar() {
 
   return (
     <nav>
-      <h2>SizeByte</h2>
+      <div className="brand">
+        <h2>SizeByte</h2>
+        <p> Tech for a Bigger You </p>
+      </div>
 
       {!userToken && !adminToken && (
-        <>
+        <div className="guest-links">
           <Link to="/">Products</Link>
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Signup</Link>
-        </>
+
+          <div>
+            <Link to="/login">Login</Link>
+            <Link to="/signup">Signup</Link>
+          </div>
+        </div>
       )}
 
       {userToken && (

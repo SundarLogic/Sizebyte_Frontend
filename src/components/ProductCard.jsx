@@ -19,11 +19,12 @@ function ProductCard({ product }) {
   };
 
   return (
-    <div>
-      <img src={product.imageUrl} alt={product.name} width="200" />
+    <div className="product-card">
+      <img src={product.imageUrl} alt={product.name} />
 
       <h2>{product.name}</h2>
       <p>Category: {product.category}</p>
+      <p>Description: {product.description}</p>
       <p>Price: ₹{product.price}</p>
       <p>Stock: {product.quantity}</p>
 

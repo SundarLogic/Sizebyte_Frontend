@@ -17,11 +17,16 @@ function Products() {
 
   return (
     <div>
-      <h1>SizeByte Products</h1>
+      <div className="products-header">
+        <h1>Explore Our Products</h1>
+        <p>Explore our range of computer accessories and gadgets</p>
+      </div>
 
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
-      ))}
+      <div className="products-grid">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
     </div>
   );
 }
