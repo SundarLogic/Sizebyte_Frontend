@@ -23,8 +23,28 @@ export const userSignup = async (name, email, password, address) => {
   return data;
 };
 
-export const getProducts = async () => {
-  const response = await fetch(`${API_URL}/products`);
+export const getProducts = async ({
+  page = 1,
+  limit = 6,
+  search = "",
+  category = "",
+  minPrice = "",
+  maxPrice = "",
+  sort = "createdAt",
+  order = "ASC",
+} = {}) => {
+  const params = new URLSearchParams({
+    page,
+    limit,
+    search,
+    category,
+    minPrice,
+    maxPrice,
+    sort,
+    order,
+  });
+
+  const response = await fetch(`${API_URL}/products?${params}`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch products");

@@ -59,66 +59,76 @@ function EditProduct() {
   };
 
   return (
-    <div>
-      <h1>Edit Product</h1>
+    <div className="edit-product-page">
+      <div className="edit-product-card">
+        <h1>Edit Product</h1>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+            />
+          </div>
 
-        <div>
-          <label>Category</label>
-          <input
-            type="text"
-            value={category}
-            onChange={(event) => setCategory(event.target.value)}
-          />
-        </div>
+          <div className="form-group">
+            <label>Category</label>
 
-        <div>
-          <label>Description</label>
-          <input
-            type="text"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-          />
-        </div>
+            <select
+              value={category}
+              onChange={(event) => setCategory(event.target.value)}
+            >
+              <option value="">Select Category</option>
+              <option value="Mouse">Mouse</option>
+              <option value="Keyboard">Keyboard</option>
+              <option value="Headphones">Headphones</option>
+              <option value="Monitor">Monitor</option>
+            </select>
+          </div>
 
-        <div>
-          <label>Price</label>
-          <input
-            type="number"
-            value={price}
-            onChange={(event) => setPrice(event.target.value)}
-          />
-        </div>
+          <div className="form-group">
+            <label>Description</label>
+            <input
+              type="text"
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+            />
+          </div>
 
-        <div>
-          <label>Quantity</label>
-          <input
-            type="number"
-            value={quantity}
-            onChange={(event) => setQuantity(event.target.value)}
-          />
-        </div>
+          <div className="form-group">
+            <label>Price</label>
+            <input
+              type="number"
+              value={price}
+              onChange={(event) => setPrice(event.target.value)}
+            />
+          </div>
 
-        <div>
-          <label>New Image (optional)</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(event) => setImage(event.target.files[0])}
-          />
-        </div>
+          <div className="form-group">
+            <label>Quantity</label>
+            <input
+              type="number"
+              value={quantity}
+              onChange={(event) => setQuantity(event.target.value)}
+            />
+          </div>
 
-        <button type="submit">Update Product</button>
-      </form>
+          <div className="form-group">
+            <label>New Image (optional)</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(event) => setImage(event.target.files[0])}
+            />
+          </div>
+
+          <button className="edit-product-submit" type="submit">
+            Update Product
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

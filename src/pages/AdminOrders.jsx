@@ -37,47 +37,78 @@ function AdminOrders() {
   };
 
   if (loading) {
-    return <h2>Loading orders...</h2>;
+    return <h2 className="page-message">Loading orders...</h2>;
   }
 
   if (orders.length === 0) {
-    return <h2>No orders found.</h2>;
+    return <h2 className="page-message">No orders found.</h2>;
   }
 
   return (
-    <div>
-      <h1>Admin Orders</h1>
+    <div className="admin-page">
+      <div className="admin-header">
+        <h1>Admin Orders</h1>
+        <p>View and manage customer orders</p>
+      </div>
 
-      {orders.map((order, index) => (
-        <div key={`${order.orderId}-${order.productId}-${index}`}>
-          <h2>Order #{order.orderId}</h2>
-
-          <p>User ID: {order.userId}</p>
-          <p>Product: {order.product.name}</p>
-          <p>Quantity: {order.quantity}</p>
-          <p>Price: ₹{order.price}</p>
-          <p>Total: ₹{order.totalAmount}</p>
-          <p>Status: {order.status}</p>
-
-          <button onClick={() => handleStatusChange(order.orderId, "SHIPPED")}>
-            Shipped
-          </button>
-
-          <button
-            onClick={() => handleStatusChange(order.orderId, "DELIVERED")}
+      <div className="admin-orders">
+        {orders.map((order, index) => (
+          <div
+            className="admin-order-card"
+            key={`${order.orderId}-${order.productId}-${index}`}
           >
-            Delivered
-          </button>
+            <div className="order-header">
+              <h2>Order #{order.orderId}</h2>
 
-          <button
-            onClick={() => handleStatusChange(order.orderId, "CANCELLED")}
-          >
-            Cancelled
-          </button>
+              <span className={`order-status ${order.status.toLowerCase()}`}>
+                {order.status}
+              </span>
+            </div>
 
-          <hr />
-        </div>
-      ))}
+            <div className="order-details">
+              <p>
+                <strong>User ID:</strong> {order.userId}
+              </p>
+
+              <p>
+                <strong>Product:</strong> {order.product.name}
+              </p>
+
+              <p>
+                <strong>Quantity:</strong> {order.quantity}
+              </p>
+
+              <p>
+                <strong>Price:</strong> ₹{order.price}
+              </p>
+
+              <p>
+                <strong>Total:</strong> ₹{order.totalAmount}
+              </p>
+            </div>
+
+            <div className="order-actions">
+              <button
+                onClick={() => handleStatusChange(order.orderId, "SHIPPED")}
+              >
+                Shipped
+              </button>
+
+              <button
+                onClick={() => handleStatusChange(order.orderId, "DELIVERED")}
+              >
+                Delivered
+              </button>
+
+              <button
+                onClick={() => handleStatusChange(order.orderId, "CANCELLED")}
+              >
+                Cancelled
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

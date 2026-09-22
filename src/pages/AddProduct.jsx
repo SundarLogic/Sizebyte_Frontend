@@ -35,6 +35,13 @@ function AddProduct() {
       .then((data) => {
         if (data.product) {
           alert("Product added successfully");
+
+          setName("");
+          setCategory("");
+          setDescription("");
+          setPrice("");
+          setQuantity("");
+          setImage(null);
         } else {
           alert(data.message);
         }
@@ -46,66 +53,84 @@ function AddProduct() {
   };
 
   return (
-    <div>
-      <h1>Add Product</h1>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1>Add Product</h1>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-          />
-        </div>
+        <p className="auth-subtitle">
+          Add a new product to your SizeByte store
+        </p>
 
-        <div>
-          <label>Category</label>
-          <input
-            type="text"
-            value={category}
-            onChange={(event) => setCategory(event.target.value)}
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Name</label>
+            <input
+              type="text"
+              value={name}
+              placeholder="Enter product name"
+              onChange={(event) => setName(event.target.value)}
+            />
+          </div>
 
-        <div>
-          <label>Description</label>
-          <input
-            type="text"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-          />
-        </div>
+          <div className="form-group">
+            <label>Category</label>
 
-        <div>
-          <label>Price</label>
-          <input
-            type="number"
-            value={price}
-            onChange={(event) => setPrice(event.target.value)}
-          />
-        </div>
+            <select
+              value={category}
+              onChange={(event) => setCategory(event.target.value)}
+            >
+              <option value="">Select Category</option>
+              <option value="Mouse">Mouse</option>
+              <option value="Keyboard">Keyboard</option>
+              <option value="Headphones">Headphones</option>
+              <option value="Monitor">Monitor</option>
+            </select>
+          </div>
 
-        <div>
-          <label>Quantity</label>
-          <input
-            type="number"
-            value={quantity}
-            onChange={(event) => setQuantity(event.target.value)}
-          />
-        </div>
+          <div className="form-group">
+            <label>Description</label>
+            <input
+              type="text"
+              value={description}
+              placeholder="Enter product description"
+              onChange={(event) => setDescription(event.target.value)}
+            />
+          </div>
 
-        <div>
-          <label>Image</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(event) => setImage(event.target.files[0])}
-          />
-        </div>
+          <div className="form-group">
+            <label>Price</label>
+            <input
+              type="number"
+              value={price}
+              placeholder="Enter price"
+              onChange={(event) => setPrice(event.target.value)}
+            />
+          </div>
 
-        <button type="submit">Add Product</button>
-      </form>
+          <div className="form-group">
+            <label>Quantity</label>
+            <input
+              type="number"
+              value={quantity}
+              placeholder="Enter stock quantity"
+              onChange={(event) => setQuantity(event.target.value)}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Product Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(event) => setImage(event.target.files[0])}
+            />
+          </div>
+
+          <button type="submit" className="auth-submit">
+            Add Product
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

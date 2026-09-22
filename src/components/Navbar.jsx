@@ -18,7 +18,7 @@ function Navbar() {
     <nav>
       <div className="brand">
         <h2>SizeByte</h2>
-        <p> Tech for a Bigger You </p>
+        <p>Tech for a Bigger You</p>
       </div>
 
       {!userToken && !adminToken && (
@@ -33,23 +33,27 @@ function Navbar() {
       )}
 
       {userToken && (
-        <>
-          <Link to="/">Products</Link>
-          <Link to="/cart">Cart</Link>
-          <Link to="/orders">Orders</Link>
+        <div className="user-links">
+          <div>
+            <Link to="/">Products</Link>
+            <Link to="/cart">Cart</Link>
+            <Link to="/orders">Orders</Link>
+          </div>
 
           <button onClick={handleLogout}>Logout</button>
-        </>
+        </div>
       )}
 
       {adminToken && (
-        <>
+        <div className="admin-navbar">
           <Link to="/admin/dashboard">Dashboard</Link>
-          <Link to="/admin/products">Manage Products</Link>
-          <Link to="/admin/orders">Orders</Link>
 
-          <button onClick={handleLogout}>Logout</button>
-        </>
+          <div className="admin-navbar-right">
+            <Link to="/admin/products/add">Add Product</Link>
+            <Link to="/admin/orders">Orders</Link>
+            <button onClick={handleLogout}>Logout</button>
+          </div>
+        </div>
       )}
     </nav>
   );

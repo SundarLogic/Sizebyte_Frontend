@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const API_URL = "https://sizebyte.vercel.app";
 
@@ -38,60 +39,85 @@ function Signup() {
   };
 
   return (
-    <div>
-      <h1>Signup</h1>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1>Create Account</h1>
+        <p className="auth-subtitle">Join SizeByte and start shopping</p>
 
-      <div>
-        <button type="button" onClick={() => setRole("user")}>
-          User
-        </button>
+        <div className="role-switch">
+          <button
+            type="button"
+            className={role === "user" ? "active" : ""}
+            onClick={() => setRole("user")}
+          >
+            User
+          </button>
 
-        <button type="button" onClick={() => setRole("admin")}>
-          Admin
-        </button>
+          <button
+            type="button"
+            className={role === "admin" ? "active" : ""}
+            onClick={() => setRole("admin")}
+          >
+            Admin
+          </button>
+        </div>
+
+        <h2>{role === "user" ? "User Signup" : "Admin Signup"}</h2>
+
+        <form onSubmit={handleSignup}>
+          <div className="form-group">
+            <label>Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              placeholder="Enter your name"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Address</label>
+            <input
+              type="text"
+              value={address}
+              onChange={(event) => setAddress(event.target.value)}
+              placeholder="Enter your address"
+              required
+            />
+          </div>
+
+          <button type="submit" className="auth-submit">
+            Sign Up
+          </button>
+        </form>
+
+        <p className="auth-footer">
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
       </div>
-
-      <h2>{role === "user" ? "User Signup" : "Admin Signup"}</h2>
-
-      <form onSubmit={handleSignup}>
-        <div>
-          <label>Name</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-          />
-        </div>
-
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-        </div>
-
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </div>
-
-        <div>
-          <label>Address</label>
-          <input
-            type="text"
-            value={address}
-            onChange={(event) => setAddress(event.target.value)}
-          />
-        </div>
-
-        <button type="submit">Signup</button>
-      </form>
     </div>
   );
 }

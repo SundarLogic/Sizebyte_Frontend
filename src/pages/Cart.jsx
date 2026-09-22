@@ -65,58 +65,83 @@ function Cart() {
       });
   };
 
+  const totalAmount = cartItems.reduce(
+    (total, item) => total + Number(item.product.price) * Number(item.quantity),
+    0,
+  );
+
   if (!token) {
-    return <h2>Please login to view your cart.</h2>;
+    return <h2 className="page-message">Please login to view your cart.</h2>;
   }
 
   if (loading) {
-    return <h2>Loading cart...</h2>;
+    return <h2 className="page-message">Loading cart...</h2>;
   }
 
   if (cartItems.length === 0) {
-    return <h2>Your cart is empty.</h2>;
+    return <h2 className="page-message">Your cart is empty.</h2>;
   }
 
   return (
-    <div>
-      <h1>My Cart</h1>
+    <div className="cart-page">
+      <div className="cart-header">
+        <h1>My Cart</h1>
+        <p>Review your products before checkout</p>
+      </div>
 
-      {cartItems.map((item) => (
-        <div key={item.productId}>
-          <img
-            src={item.product.imageUrl}
-            alt={item.product.name}
-            width="150"
-          />
+      <div className="cart-items">
+        {cartItems.map((item) => (
+          <div className="cart-item" key={item.productId}>
+            <img src={item.product.imageUrl} alt={item.product.name} />
 
-          <h2>{item.product.name}</h2>
+            <div className="cart-product-info">
+              <h2>{item.product.name}</h2>
 
-          <p>Price: ₹{item.product.price}</p>
+              <p>Price: ₹{item.product.price}</p>
 
-          <p>Quantity: {item.quantity}</p>
+              <div className="cart-quantity">
+                <span>Quantity:</span>
 
-          <button
-            onClick={() => handleUpdate(item.productId, item.quantity + 1)}
-          >
-            +
-          </button>
+                <button
+                  onClick={() => {
+                    if (item.quantity > 1) {
+                      handleUpdate(item.productId, item.quantity - 1);
+                    }
+                  }}
+                  disabled={item.quantity === 1}
+                >
+                  -
+                </button>
 
-          <button
-            onClick={() => {
-              if (item.quantity > 1) {
-                handleUpdate(item.productId, item.quantity - 1);
-              }
-            }}
-          >
-            -
-          </button>
+                <span>{item.quantity}</span>
 
-          <button onClick={() => handleDelete(item.productId)}>Remove</button>
+                <button
+                  onClick={() =>
+                    handleUpdate(item.productId, item.quantity + 1)
+                  }
+                >
+                  +
+                </button>
+              </div>
+            </div>
 
-          <hr />
-        </div>
-      ))}
-      <button onClick={handleCheckout}>Checkout</button>
+            <button
+              className="remove-button"
+              onClick={() => handleDelete(item.productId)}
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <div className="cart-summary">
+        <h2>Total: ₹{totalAmount.toFixed(2)}</h2>
+
+        <button className="checkout-button" onClick={handleCheckout}>
+          Checkout
+        </button>
+      </div>
     </div>
   );
 }
