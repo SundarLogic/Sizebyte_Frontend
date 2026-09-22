@@ -9,7 +9,6 @@ import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
 import AdminDashboard from "./pages/AdminDashboard";
 import AddProduct from "./pages/AddProduct";
-import ManageProducts from "./pages/ManageProducts";
 import EditProduct from "./pages/EditProduct";
 import AdminOrders from "./pages/AdminOrders";
 
@@ -26,7 +25,6 @@ function App() {
         <Route path="/orders" element={<Orders />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/products/add" element={<AddProduct />} />
-        <Route path="/admin/products" element={<ManageProducts />} />
         <Route path="/admin/products/edit/:id" element={<EditProduct />} />
         <Route path="/admin/orders" element={<AdminOrders />} />
       </Routes>
