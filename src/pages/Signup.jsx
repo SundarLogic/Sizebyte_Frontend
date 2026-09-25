@@ -50,7 +50,7 @@ function Signup() {
             className={role === "user" ? "active" : ""}
             onClick={() => setRole("user")}
           >
-            Customer
+            User
           </button>
 
           <button
@@ -58,11 +58,11 @@ function Signup() {
             className={role === "admin" ? "active" : ""}
             onClick={() => setRole("admin")}
           >
-            Seller
+            Admin
           </button>
         </div>
 
-        <h2>{role === "user" ? "Customer Signup" : "Seller Signup"}</h2>
+        <h2>{role === "user" ? "User Signup" : "Admin Signup"}</h2>
 
         <form onSubmit={handleSignup}>
           <div className="form-group">

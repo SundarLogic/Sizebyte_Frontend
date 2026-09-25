@@ -46,7 +46,7 @@ function Login() {
           localStorage.setItem("adminToken", data.token);
           localStorage.setItem("adminId", data.adminId);
 
-          alert("Seller Login Successful");
+          alert("Admin Login Successful");
           window.location.href = "/admin/dashboard";
         }
       })
@@ -69,7 +69,7 @@ function Login() {
             className={role === "user" ? "active" : ""}
             onClick={() => setRole("user")}
           >
-            Customer
+            User
           </button>
 
           <button
@@ -77,11 +77,11 @@ function Login() {
             className={role === "admin" ? "active" : ""}
             onClick={() => setRole("admin")}
           >
-            Seller
+            Admin
           </button>
         </div>
 
-        <h2>{role === "user" ? "Customer Login" : "Seller Login"}</h2>
+        <h2>{role === "user" ? "User Login" : "Admin Login"}</h2>
 
         <form onSubmit={handleLogin}>
           <div className="form-group">

@@ -52,7 +52,7 @@ function AdminDashboard() {
   return (
     <div className="admin-page">
       <div className="admin-header">
-        <h1>Seller Dashboard</h1>
+        <h1>Admin Dashboard</h1>
         <p>Manage your SizeByte store</p>
       </div>
 
