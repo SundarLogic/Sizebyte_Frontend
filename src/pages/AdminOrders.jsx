@@ -47,7 +47,7 @@ function AdminOrders() {
   return (
     <div className="admin-page">
       <div className="admin-header">
-        <h1>Admin Orders</h1>
+        <h1>Seller Orders</h1>
         <p>View and manage customer orders</p>
       </div>
 
@@ -67,7 +67,7 @@ function AdminOrders() {
 
             <div className="order-details">
               <p>
-                <strong>User ID:</strong> {order.userId}
+                <strong>Customer ID:</strong> {order.userId}
               </p>
 
               <p>
