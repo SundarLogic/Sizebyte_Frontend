@@ -9,7 +9,6 @@ function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [address, setAddress] = useState("");
 
   const handleSignup = (event) => {
     event.preventDefault();
@@ -25,7 +24,6 @@ function Signup() {
         name: name,
         email: email,
         password: password,
-        address: address,
       }),
     })
       .then((response) => response.json())
@@ -94,17 +92,6 @@ function Signup() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               placeholder="Enter your password"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Address</label>
-            <input
-              type="text"
-              value={address}
-              onChange={(event) => setAddress(event.target.value)}
-              placeholder="Enter your address"
               required
             />
           </div>
