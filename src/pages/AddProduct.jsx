@@ -1,6 +1,5 @@
 import { useState } from "react";
-
-const API_URL = "https://sizebyte.vercel.app";
+import { addProduct } from "../api/api";
 
 function AddProduct() {
   const [name, setName] = useState("");
@@ -24,31 +23,19 @@ function AddProduct() {
     formData.append("quantity", quantity);
     formData.append("image", image);
 
-    fetch(`${API_URL}/products`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.product) {
-          alert("Product added successfully");
+    addProduct(formData, token)
+      .then(() => {
+        alert("Product added successfully");
 
-          setName("");
-          setCategory("");
-          setDescription("");
-          setPrice("");
-          setQuantity("");
-          setImage(null);
-        } else {
-          alert(data.message);
-        }
+        setName("");
+        setCategory("");
+        setDescription("");
+        setPrice("");
+        setQuantity("");
+        setImage(null);
       })
       .catch((error) => {
-        console.error(error);
-        alert("Something went wrong");
+        alert(error.message);
       });
   };
 

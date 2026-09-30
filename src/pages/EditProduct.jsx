@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getProducts, updateProduct } from "../api/api";
+import { getAdminProducts, updateProduct } from "../api/api";
 
 function EditProduct() {
   const { id } = useParams();
@@ -13,7 +13,8 @@ function EditProduct() {
   const [image, setImage] = useState(null);
 
   useEffect(() => {
-    getProducts()
+    //Admin products are not paginated, so every product can be found here
+    getAdminProducts(localStorage.getItem("adminToken"))
       .then((data) => {
         const product = data.products.find(
           (product) => product.id === Number(id),

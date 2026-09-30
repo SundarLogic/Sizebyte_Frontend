@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
-const API_URL = "https://sizebyte.vercel.app";
+import { userSignup, adminSignup } from "../api/api";
 
 function Signup() {
   const [role, setRole] = useState("user");
@@ -13,26 +12,14 @@ function Signup() {
   const handleSignup = (event) => {
     event.preventDefault();
 
-    const endpoint = role === "user" ? "/user/signup" : "/admin/signup";
+    const signup = role === "user" ? userSignup : adminSignup;
 
-    fetch(`${API_URL}${endpoint}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name,
-        email: email,
-        password: password,
-      }),
-    })
-      .then((response) => response.json())
+    signup(name, email, password)
       .then((data) => {
         alert(data.message);
       })
       .catch((error) => {
-        console.error(error);
-        alert("Something went wrong");
+        alert(error.message);
       });
   };
 

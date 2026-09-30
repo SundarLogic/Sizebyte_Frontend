@@ -1,29 +1,78 @@
-const API_URL = "https://sizebyte.vercel.app";
+const API_URL = import.meta.env.VITE_API_URL || "https://sizebyte.vercel.app";
 
-export const userSignup = async (name, email, password, address) => {
-  const response = await fetch(`${API_URL}/user/signup`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: name,
-      email: email,
-      password: password,
-      address: address,
-    }),
+const request = async (path, { method = "GET", token, body } = {}) => {
+  const isFormData = body instanceof FormData;
+
+  const headers = {};
+  if (body && !isFormData) {
+    headers["Content-Type"] = "application/json";
+  }
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const response = await fetch(`${API_URL}${path}`, {
+    method: method,
+    headers: headers,
+    body: body && !isFormData ? JSON.stringify(body) : body,
   });
 
-  const data = await response.json();
+  //Error pages from the server may not be JSON
+  const text = await response.text();
+  let data = {};
+  try {
+    data = text ? JSON.parse(text) : {};
+  } catch {
+    data = { message: text };
+  }
 
   if (!response.ok) {
-    throw new Error(data.message || "Signup failed");
+    //Expired or invalid token: log out and send the user to login
+    if (response.status === 401 && token) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("adminToken");
+      localStorage.removeItem("adminId");
+      window.location.href = "/login";
+    }
+
+    const message =
+      data.errors?.[0]?.msg || data.message || `Request failed (${response.status})`;
+    throw new Error(message);
   }
 
   return data;
 };
 
-export const getProducts = async ({
+export const userSignup = (name, email, password) => {
+  return request("/user/signup", {
+    method: "POST",
+    body: { name, email, password },
+  });
+};
+
+export const adminSignup = (name, email, password) => {
+  return request("/admin/signup", {
+    method: "POST",
+    body: { name, email, password },
+  });
+};
+
+export const userLogin = (email, password) => {
+  return request("/user/login", {
+    method: "POST",
+    body: { email, password },
+  });
+};
+
+export const adminLogin = (email, password) => {
+  return request("/admin/login", {
+    method: "POST",
+    body: { email, password },
+  });
+};
+
+export const getProducts = ({
   page = 1,
   limit = 6,
   search = "",
@@ -31,222 +80,92 @@ export const getProducts = async ({
   minPrice = "",
   maxPrice = "",
   sort = "createdAt",
-  order = "ASC",
+  order = "asc",
 } = {}) => {
-  const params = new URLSearchParams({
-    page,
-    limit,
-    search,
-    category,
-    minPrice,
-    maxPrice,
-    sort,
-    order,
-  });
+  const filters = { page, limit, search, category, minPrice, maxPrice, sort, order };
 
-  const response = await fetch(`${API_URL}/products?${params}`);
+  //Only send filters that have a value
+  const params = new URLSearchParams(
+    Object.entries(filters).filter(([, value]) => value !== ""),
+  );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch products");
-  }
-
-  return response.json();
+  return request(`/products?${params}`);
 };
 
-export const addToCart = async (productId, quantity, token) => {
-  const response = await fetch(`${API_URL}/cart`, {
+export const addProduct = (productData, token) => {
+  return request("/products", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      productId: productId,
-      quantity: quantity,
-    }),
-  });
-
-  if (!response.ok) {
-    const data = await response.json();
-    throw new Error(data.message || "Failed to add product to cart");
-  }
-
-  return response.json();
-};
-
-export const getCart = async (token) => {
-  const response = await fetch(`${API_URL}/cart`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    const data = await response.json();
-    throw new Error(data.message || "Failed to fetch cart");
-  }
-
-  return response.json();
-};
-
-export const updateCart = async (productId, quantity, token) => {
-  const response = await fetch(`${API_URL}/cart`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      productId: productId,
-      quantity: quantity,
-    }),
-  });
-
-  if (!response.ok) {
-    const data = await response.json();
-    throw new Error(data.message || "Failed to update cart");
-  }
-
-  return response.json();
-};
-
-export const deleteCartItem = async (productId, token) => {
-  const response = await fetch(`${API_URL}/cart`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      productId: productId,
-    }),
-  });
-
-  if (!response.ok) {
-    const data = await response.json();
-    throw new Error(data.message || "Failed to remove product");
-  }
-
-  return response.json();
-};
-
-export const checkout = async (token) => {
-  const response = await fetch(`${API_URL}/checkout`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Checkout failed");
-  }
-
-  return data;
-};
-
-export const getOrders = async (token) => {
-  const response = await fetch(`${API_URL}/orders`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Failed to fetch orders");
-  }
-
-  return data;
-};
-
-export const updateProduct = async (productId, productData, token) => {
-  const response = await fetch(`${API_URL}/products/${productId}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    token,
     body: productData,
   });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Failed to update product");
-  }
-
-  return data;
 };
 
-export const deleteProduct = async (productId, token) => {
-  const response = await fetch(`${API_URL}/products/${productId}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Failed to delete product");
-  }
-
-  return data;
-};
-
-export const getAdminOrders = async (token) => {
-  const response = await fetch(`${API_URL}/admin/orders`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Failed to fetch admin orders");
-  }
-
-  return data;
-};
-
-export const updateOrderStatus = async (orderId, status, token) => {
-  const response = await fetch(`${API_URL}/admin/order/${orderId}`, {
+export const updateProduct = (productId, productData, token) => {
+  return request(`/products/${productId}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      status: status,
-    }),
+    token,
+    body: productData,
   });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || "Failed to update order status");
-  }
-
-  return data;
 };
 
-export const getAdminProducts = async (token) => {
-  const response = await fetch(`${API_URL}/admin/products`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+export const deleteProduct = (productId, token) => {
+  return request(`/products/${productId}`, {
+    method: "DELETE",
+    token,
   });
+};
 
-  const data = await response.json();
+export const getAdminProducts = (token) => {
+  return request("/admin/products", { token });
+};
 
-  if (!response.ok) {
-    throw new Error(data.message || "Failed to fetch admin products");
-  }
+export const addToCart = (productId, quantity, token) => {
+  return request("/cart", {
+    method: "POST",
+    token,
+    body: { productId, quantity },
+  });
+};
 
-  return data;
+export const getCart = (token) => {
+  return request("/cart", { token });
+};
+
+export const updateCart = (productId, quantity, token) => {
+  return request("/cart", {
+    method: "PUT",
+    token,
+    body: { productId, quantity },
+  });
+};
+
+export const deleteCartItem = (productId, token) => {
+  return request("/cart", {
+    method: "DELETE",
+    token,
+    body: { productId },
+  });
+};
+
+export const checkout = (token) => {
+  return request("/checkout", {
+    method: "POST",
+    token,
+  });
+};
+
+export const getOrders = (token) => {
+  return request("/orders", { token });
+};
+
+export const getAdminOrders = (token) => {
+  return request("/admin/orders", { token });
+};
+
+export const updateOrderStatus = (orderId, status, token) => {
+  return request(`/admin/order/${orderId}`, {
+    method: "PUT",
+    token,
+    body: { status },
+  });
 };
